@@ -55,8 +55,9 @@ class NetworkTopo(Topo):
     def build(self, **_opts):
         # define hosts
         user = self.addHost("user", ip="10.68.1.2/30", defaultRoute="via 10.68.1.1")
-        vpn = self.addHost("vpn", ip="10.68.2.2/30", defaultRoute="via 10.68.2.1")
-        service = self.addHost("internet", ip="10.68.3.2/30")
+        service = self.addHost("internet", ip="10.68.2.2/30")
+        vpn = self.addHost("vpn", ip="10.68.3.2/30", defaultRoute="via 10.68.3.1")
+
 
         # define switches
         s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
