@@ -62,7 +62,7 @@ class NetworkTopo(Topo):
         s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
 
         # connect host witch switches
-        for host, switch in [(user, s1), (service, s1), (vpn, s3), (vpn, s4)]:
+        for host, switch in [(user, s1), (service, s2), (vpn, s3), (vpn, s4)]:
             self.addLink(host, switch)
 
         # define isps
