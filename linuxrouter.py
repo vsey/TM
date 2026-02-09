@@ -53,11 +53,18 @@ class NetworkTopo(Topo):
 
     # pylint: disable=arguments-differ
     def build(self, **_opts):
+
+        # define hosts
         user = self.addHost("user", ip="10.68.1.2/30")
         vpn = self.addHost("vpn", ip="10.68.2.2/30")
         internet = self.addHost("internet", ip="10.68.3.2/30")
 
+        # define switches
         s1, s2, s3, s4 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4")]
+
+        # connect host witch switches
+        for host, switch in [(user, s1), (internet, s1), (vpn, s3), (vpn, s4)]:
+            self.addLink(host, switch)
 
         # defaultIP = "192.168.1.1/24"  # IP address for r0-eth1
         # router = self.addNode("r0", cls=LinuxRouter, ip=defaultIP)
