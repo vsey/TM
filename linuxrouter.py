@@ -29,9 +29,10 @@ executing 'ip route' or 'route' commands on the router or hosts.
 
 from mininet.topo import Topo
 from mininet.net import Mininet
-from mininet.node import Node
+from mininet.node import Node, OVSSwitch
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
+from functools import partial
 
 
 class LinuxRouter(Node):
@@ -78,7 +79,7 @@ class NetworkTopo(Topo):
             isp_user, s2, intfName1="isp_user-s2", params1={"ip": "10.68.2.1/30"}
         )
         self.addLink(
-            isp_user, s3, intfName1="ips_user-s3", params1={"ip": "10.68.3.1/30"}
+            isp_user, s3, intfName1="isp_user-s3", params1={"ip": "10.68.3.1/30"}
         )
 
         self.addLink(
@@ -105,7 +106,7 @@ class NetworkTopo(Topo):
 def run():
     "Test linux router"
     topo = NetworkTopo()
-    net = Mininet(topo=topo, waitConnected=True)  # controller is used by s1-s3
+    net = Mininet(topo=topo, waitConnected=True, switch=partial(OVSSwitch, failMode="standalone"))  # controller is used by s1-s3
     net.start()
     # info("*** Routing Table on Router:\n")
     # info(net["r0"].cmd("route"))
