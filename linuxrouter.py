@@ -59,7 +59,6 @@ class NetworkTopo(Topo):
         service = self.addHost("internet", ip="10.68.2.2/30")
         vpn = self.addHost("vpn", ip="10.68.3.2/30", defaultRoute="via 10.68.3.1")
 
-
         # define switches
         s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
 
@@ -89,24 +88,13 @@ class NetworkTopo(Topo):
             isp_vpn, s5, intfName1="isp_vpn-s5", params1={"ip": "10.68.5.1/30"}
         )
 
-        # defaultIP = "192.168.1.1/24"  # IP address for r0-eth1
-        # router = self.addNode("r0", cls=LinuxRouter, ip=defaultIP)
-
-        # self.addLink(
-        #     s1, router, intfName2="r0-eth1", params2={"ip": defaultIP}
-        # )  # for clarity
-        # self.addLink(s2, router, intfName2="r0-eth2", params2={"ip": "172.16.0.1/12"})
-        # self.addLink(s3, router, intfName2="r0-eth3", params2={"ip": "10.0.0.1/8"})
-
-        # h1 = self.addHost("h1", ip="192.168.1.100/24", defaultRoute="via 192.168.1.1")
-        # h2 = self.addHost("h2", ip="172.16.0.100/12", defaultRoute="via 172.16.0.1")
-        # h3 = self.addHost("h3", ip="10.0.0.100/8", defaultRoute="via 10.0.0.1")
-
 
 def run():
     "Test linux router"
     topo = NetworkTopo()
-    net = Mininet(topo=topo, waitConnected=True, switch=partial(OVSSwitch, failMode="standalone"))  # controller is used by s1-s3
+    net = Mininet(
+        topo=topo, waitConnected=True, switch=partial(OVSSwitch, failMode="standalone")
+    )  # controller is used by s1-s3
     net.start()
     # info("*** Routing Table on Router:\n")
     # info(net["r0"].cmd("route"))
