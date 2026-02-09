@@ -109,7 +109,7 @@ def run():
     isp_user.cmd("ip route add 10.68.4.0/30 via 10.68.2.1")
     isp_user.cmd("ip route add 10.68.5.0/30 via 10.68.2.1")
 
-    internet_core.cmd("ip route add 10.68.1.0/30 via 10.68.2.2") 
+    internet_core.cmd("ip route add 10.68.1.0/30 via 10.68.2.2")
     internet_core.cmd("ip route add 10.68.5.0/30 via 10.68.4.2")
 
     isp_vpn.cmd("ip route add 10.68.1.0/30 via 10.68.4.1")
