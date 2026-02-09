@@ -56,37 +56,39 @@ class NetworkTopo(Topo):
     def build(self, **_opts):
         # define hosts
         user = self.addHost("user", ip="10.68.1.2/30", defaultRoute="via 10.68.1.1")
-        service = self.addHost("internet", ip="10.68.2.2/30")
-        vpn = self.addHost("vpn", ip="10.68.3.2/30", defaultRoute="via 10.68.3.1")
-
-        # define switches
-        s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
-
-        # connect host witch switches
-        for host, switch in [(user, s1), (service, s2), (vpn, s3), (vpn, s4)]:
-            self.addLink(host, switch)
+        vpn = self.addHost("vpn", ip="10.68.5.2/30", defaultRoute="via 10.68.5.1")
+        service = self.addHost("internet", ip="10.68.3.2/30", defaultRoute="via 10.68.3.1")
 
         # define isps
         isp_user = self.addHost("isp_user", ip=None, cls=LinuxRouter)
         isp_vpn = self.addHost("isp_vpn", ip=None, cls=LinuxRouter)
 
-        # define isp links
-        self.addLink(
-            isp_user, s1, intfName1="isp_user-s1", params1={"ip": "10.68.1.1/30"}
-        )
-        self.addLink(
-            isp_user, s2, intfName1="isp_user-s2", params1={"ip": "10.68.2.1/30"}
-        )
-        self.addLink(
-            isp_user, s3, intfName1="isp_user-s3", params1={"ip": "10.68.3.1/30"}
-        )
+        # internet core
+        internet_core = self.addHost("internet_core", ip=None, cls=LinuxRouter)
 
-        self.addLink(
-            isp_vpn, s4, intfName1="isp_vpn-s4", params1={"ip": "10.68.4.1/30"}
-        )
-        self.addLink(
-            isp_vpn, s5, intfName1="isp_vpn-s5", params1={"ip": "10.68.5.1/30"}
-        )
+        # define switches
+        s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
+
+        # connections
+        # S1
+        self.addLink(user, s1)
+        self.addLink(isp_user, s1, intfName1="isp_user-s1", params1={"ip": "10.68.1.1/30"})
+
+        # S2
+        self.addLink(internet_core, s2, intfName1="core-s2", params1={"ip": "10.68.2.1/30"})
+        self.addLink(isp_user, s2, intfName1="isp_user-s2", params1={"ip": "10.68.2.2/30"})
+
+        # S3
+        self.addLink(service, s3)
+        self.addLink(internet_core, s3, intfName1="core-s3", params1={"ip": "10.68.3.1/30"})
+
+        # S4
+        self.addLink(isp_vpn, s4, intfName1="isp_vpn-s4", params1={"ip": "10.68.4.2/30"})
+        self.addLink(internet_core, s4, intfName1="core-s4", params1={"ip": "10.68.4.1/30"})
+
+        # S5
+        self.addLink(vpn, s5)
+        self.addLink(isp_vpn, s5, intfName1="isp_vpn-s5", params1={"ip": "10.68.5.1/30"})
 
 
 def run():
