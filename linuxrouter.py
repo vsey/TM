@@ -68,8 +68,8 @@ class NetworkTopo(Topo):
             self.addLink(host, switch)
 
         # define isps
-        isp_user = self.addNode("isp_user", cls=LinuxRouter)
-        isp_vpn = self.addNode("isp_vpn", cls=LinuxRouter)
+        isp_user = self.addHost("isp_user", cls=LinuxRouter)
+        isp_vpn = self.addHost("isp_vpn", cls=LinuxRouter)
 
         # define isp links
         self.addLink(
