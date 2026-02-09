@@ -66,6 +66,28 @@ class NetworkTopo(Topo):
         for host, switch in [(user, s1), (internet, s1), (vpn, s3), (vpn, s4)]:
             self.addLink(host, switch)
 
+        # define isps
+        user_isp = self.addNode("user_isp", cls=LinuxRouter)
+        vpn_isp = self.addNode("user_isp", cls=LinuxRouter)
+
+        # define isp links
+        self.addLink(
+            user_isp, s1, intfName1="user_isp-s1", params1={"ip": "10.68.1.1/30"}
+        )
+        self.addLink(
+            user_isp, s2, intfName1="user_isp-s2", params1={"ip": "10.68.2.1/30"}
+        )
+        self.addLink(
+            user_isp, s3, intfName1="user_isp-s3", params1={"ip": "10.68.3.1/30"}
+        )
+
+        self.addLink(
+            vpn_isp, s4, intfName1="vpn_isp-s4", params1={"ip": "10.68.4.1/30"}
+        )
+        self.addLink(
+            vpn_isp, s5, intfName1="vpn_isp-s5", params1={"ip": "10.68.5.1/30"}
+        )
+
         # defaultIP = "192.168.1.1/24"  # IP address for r0-eth1
         # router = self.addNode("r0", cls=LinuxRouter, ip=defaultIP)
 
