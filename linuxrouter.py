@@ -53,17 +53,16 @@ class NetworkTopo(Topo):
 
     # pylint: disable=arguments-differ
     def build(self, **_opts):
-
         # define hosts
-        user = self.addHost("user", ip="10.68.1.2/30")
-        vpn = self.addHost("vpn", ip="10.68.2.2/30")
-        internet = self.addHost("internet", ip="10.68.3.2/30")
+        user = self.addHost("user", ip="10.68.1.2/30", defaultRoute="via 10.68.1.1")
+        vpn = self.addHost("vpn", ip="10.68.2.2/30", defaultRoute="via 10.68.2.1")
+        service = self.addHost("internet", ip="10.68.3.2/30")
 
         # define switches
-        s1, s2, s3, s4 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4")]
+        s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
 
         # connect host witch switches
-        for host, switch in [(user, s1), (internet, s1), (vpn, s3), (vpn, s4)]:
+        for host, switch in [(user, s1), (service, s1), (vpn, s3), (vpn, s4)]:
             self.addLink(host, switch)
 
         # define isps
@@ -100,9 +99,6 @@ class NetworkTopo(Topo):
         # h1 = self.addHost("h1", ip="192.168.1.100/24", defaultRoute="via 192.168.1.1")
         # h2 = self.addHost("h2", ip="172.16.0.100/12", defaultRoute="via 172.16.0.1")
         # h3 = self.addHost("h3", ip="10.0.0.100/8", defaultRoute="via 10.0.0.1")
-
-        # for h, s in [(h1, s1), (h2, s2), (h3, s3)]:
-        #     self.addLink(h, s)
 
 
 def run():
