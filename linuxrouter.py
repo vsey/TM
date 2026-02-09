@@ -57,7 +57,7 @@ class NetworkTopo(Topo):
         # define hosts
         user = self.addHost("user", ip="10.68.1.2/30", defaultRoute="via 10.68.1.1")
         vpn = self.addHost("vpn", ip="10.68.5.2/30", defaultRoute="via 10.68.5.1")
-        service = self.addHost("internet", ip="10.68.3.2/30", defaultRoute="via 10.68.3.1")
+        service = self.addHost("service", ip="10.68.3.2/30", defaultRoute="via 10.68.3.1")
 
         # define isps
         isp_user = self.addHost("isp_user", ip=None, cls=LinuxRouter)
@@ -98,8 +98,24 @@ def run():
         topo=topo, waitConnected=True, switch=partial(OVSSwitch, failMode="standalone")
     )  # controller is used by s1-s3
     net.start()
-    # info("*** Routing Table on Router:\n")
-    # info(net["r0"].cmd("route"))
+
+    # setup routes after the nodes are initialized
+    # Get routers
+    isp_user = net["isp_user"]
+    isp_vpn = net["isp_vpn"]
+    internet_core = net["internet_core"]
+
+    isp_user.cmd("ip route add 10.68.3.0/30 via 10.68.2.1")
+    isp_user.cmd("ip route add 10.68.4.0/30 via 10.68.2.1")
+    isp_user.cmd("ip route add 10.68.5.0/30 via 10.68.2.1")
+
+    internet_core.cmd("ip route add 10.68.1.0/30 via 10.68.2.2") 
+    internet_core.cmd("ip route add 10.68.5.0/30 via 10.68.4.2")
+
+    isp_vpn.cmd("ip route add 10.68.1.0/30 via 10.68.4.1")
+    isp_vpn.cmd("ip route add 10.68.2.0/30 via 10.68.4.1")
+    isp_vpn.cmd("ip route add 10.68.3.0/30 via 10.68.4.1")
+
     CLI(net)
     net.stop()
 
