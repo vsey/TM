@@ -116,6 +116,14 @@ def run():
     isp_vpn.cmd("ip route add 10.68.2.0/30 via 10.68.4.1")
     isp_vpn.cmd("ip route add 10.68.3.0/30 via 10.68.4.1")
 
+    # setup vpn
+    server = net["vpn"]
+    client = net["user"]
+
+    if True:
+        server.cmd("wg-quick up ./server.conf")
+        client.cmd("wg-quick up ./client.conf")
+
     CLI(net)
     net.stop()
 
