@@ -9,7 +9,7 @@ def ping(src, dst, count=30):
 def test_latency(net, result_dir: Union[Path, str] = Path(".")):
     result_dir = result_dir if isinstance(result_dir, Path) else Path(result_dir)
     result_dir = result_dir.expanduser().resolve()
-    result_dir.parent.mkdir(parents=True, exist_ok=True)
+    result_dir.mkdir(parents=True, exist_ok=True)
 
     vpn = net["vpn"]
     service = net["service"]
