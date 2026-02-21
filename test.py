@@ -1,11 +1,12 @@
 from pathlib import Path
+from typing import Union
 
 
 def ping(src, dst, count=30):
     out = src.cmd(f"ping -c {count} {dst.IP()}")
     return out
 
-def test_latency(net, result_dir: Path | str = Path(".")):
+def test_latency(net, result_dir: Union[Path, str] = Path(".")):
     result_dir = result_dir if isinstance(result_dir, Path) else Path(result_dir)
     result_dir = result_dir.expanduser().resolve()
     result_dir.mkdir(parents=True, exist_ok=True)
