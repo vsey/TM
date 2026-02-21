@@ -33,7 +33,7 @@ from mininet.node import Node, OVSSwitch
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
 from functools import partial
-from test import test_latency
+from test import test_latency, test_bandwidth
 
 
 class LinuxRouter(Node):
@@ -122,12 +122,15 @@ def run():
     client = net["user"]
 
     test_latency(net, "./test/latency-bare")
+    test_bandwidth(net, "./test/bw-bare")
 
     if True:
         client.cmd("wg-quick up ./client.conf")
         server.cmd("wg-quick up ./server.conf")
 
     test_latency(net, "./test/latency-wg")
+    test_bandwidth(net, "./test/bw-wg")
+
 
     CLI(net)
     net.stop()
