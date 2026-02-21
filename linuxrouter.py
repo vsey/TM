@@ -56,7 +56,7 @@ class NetworkTopo(Topo):
     def build(self, **_opts):
         # define hosts
         user = self.addHost("user", ip="10.68.1.2/30", defaultRoute="via 10.68.1.1")
-        vpn = self.addHost("vpn", ip="10.68.5.2/30", defaultRoute="via 10.68.5.1")
+        vpn = self.addHost("vpn", ip="10.68.5.2/30", defaultRoute="via 10.68.5.1", cls=LinuxRouter)
         service = self.addHost("service", ip="10.68.3.2/30", defaultRoute="via 10.68.3.1")
 
         # define isps
