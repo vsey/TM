@@ -56,7 +56,7 @@ class NetworkTopo(Topo):
     def build(self, **_opts):
         # define hosts
         user = self.addHost("user", ip="10.68.1.2/30", defaultRoute="via 10.68.1.1")
-        vpn = self.addHost("vpn", ip="10.68.5.2/30", defaultRoute="via 10.68.5.1", cls=LinuxRouter)
+        vpn = self.addHost("vpn", ip="10.68.5.2/30", defaultRoute="via 10.68.5.1")
         service = self.addHost("service", ip="10.68.3.2/30", defaultRoute="via 10.68.3.1")
 
         # define isps
@@ -111,7 +111,7 @@ def run():
 
     internet_core.cmd("ip route add 10.68.1.0/30 via 10.68.2.2")
     internet_core.cmd("ip route add 10.68.5.0/30 via 10.68.4.2")
- 
+
     isp_vpn.cmd("ip route add 10.68.1.0/30 via 10.68.4.1")
     isp_vpn.cmd("ip route add 10.68.2.0/30 via 10.68.4.1")
     isp_vpn.cmd("ip route add 10.68.3.0/30 via 10.68.4.1")
@@ -123,6 +123,7 @@ def run():
     if True:
         client.cmd("wg-quick up ./client.conf")
         server.cmd("wg-quick up ./server.conf")
+
     CLI(net)
     net.stop()
 
