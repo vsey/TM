@@ -1,5 +1,6 @@
 from pathlib import Path
 
+
 def test_latency(net, file_name: str, result_dir: Path = Path(".")):
     result_dir = result_dir.expanduser().resolve()
     result_dir.mkdir(parents=True, exist_ok=True)
@@ -11,7 +12,7 @@ def test_latency(net, file_name: str, result_dir: Path = Path(".")):
     server = net["vpn"]
     client = net["user"]
 
-    cmd = f"ping -c 30 service | tee {str(result_dir / file_name)}"
-    print(cmd)
+    out = client.cmd("ping -c 30 service")
 
-    client.cmd(cmd)
+    with open(result_dir / file_name, "w") as f:
+        f.write(out)
