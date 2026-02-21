@@ -3,7 +3,7 @@ from typing import Union
 import time
 
 
-def ping(src, dst, count=30):
+def ping(src, dst, count=5):
     out = src.cmd(f"ping -c {count} {dst.IP()}")
     return out
 
