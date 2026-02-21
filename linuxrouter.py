@@ -121,13 +121,13 @@ def run():
     server = net["vpn"]
     client = net["user"]
 
-    test_latency(net, "without_wg")
+    test_latency(net, "./test/latency-bare")
 
     if True:
         client.cmd("wg-quick up ./client.conf")
         server.cmd("wg-quick up ./server.conf")
 
-    test_latency(net, "with_wg")
+    test_latency(net, "./test/latency-wg")
 
     CLI(net)
     net.stop()

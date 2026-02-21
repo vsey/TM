@@ -1,16 +1,29 @@
 from pathlib import Path
 
 
-def test_latency(net, file_name: str, result_dir: Path = Path(".")):
+def ping(src, dst, count=30):
+    out = src.cmd(f"ping -c {count} {dst.IP()}")
+    return out
+
+def test_latency(net, result_dir: Path | str = Path(".")):
+    result_dir = result_dir if isinstance(result_dir, Path) else Path(result_dir)
     result_dir = result_dir.expanduser().resolve()
     result_dir.mkdir(parents=True, exist_ok=True)
-
 
     vpn = net["vpn"]
     service = net["service"]
     user = net["user"]
 
-    out = user.cmd(f"ping -c 30 {service.IP()}")
+    vpn_service = ping(vpn, service)
+    user_vpn = ping(user, vpn)
+    user_service = ping(user, service)
 
-    with open(result_dir / file_name, "w") as f:
-        f.write(out)
+    with open(result_dir / "vpn_service", "w") as f:
+        f.write(vpn_service)
+
+    with open(result_dir / "user_vpn", "w") as f:
+        f.write(user_vpn)
+
+    with open(result_dir / "user_service", "w") as f:
+        f.write(user_service)
+
