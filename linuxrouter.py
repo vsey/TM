@@ -111,7 +111,7 @@ def run():
 
     internet_core.cmd("ip route add 10.68.1.0/30 via 10.68.2.2")
     internet_core.cmd("ip route add 10.68.5.0/30 via 10.68.4.2")
-
+ 
     isp_vpn.cmd("ip route add 10.68.1.0/30 via 10.68.4.1")
     isp_vpn.cmd("ip route add 10.68.2.0/30 via 10.68.4.1")
     isp_vpn.cmd("ip route add 10.68.3.0/30 via 10.68.4.1")
@@ -121,9 +121,8 @@ def run():
     client = net["user"]
 
     if True:
-        server.cmd("wg-quick up ./server.conf")
         client.cmd("wg-quick up ./client.conf")
-
+        server.cmd("wg-quick up ./server.conf")
     CLI(net)
     net.stop()
 
