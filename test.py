@@ -11,4 +11,4 @@ def test_latency(net, file_name: str, result_dir: Path = Path(".")):
     server = net["vpn"]
     client = net["user"]
 
-    client.cmd(f"ping -c 30 service > {str(result_dir / 'latency')}")
+    client.cmd(f"ping -c 30 service | tee {str(result_dir / file_name)}")
