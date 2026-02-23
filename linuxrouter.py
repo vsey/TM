@@ -33,7 +33,7 @@ from mininet.node import Node, OVSSwitch
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
 from functools import partial
-from test import test_latency, test_bandwidth
+from test import test_latency, test_bandwidth, CPUMonitor
 
 
 class LinuxRouter(Node):
@@ -121,7 +121,8 @@ def run():
     server = net["vpn"]
     client = net["user"]
 
-    test_latency(net, "./test/latency-bare")
+    with CPUMonitor() as latency_bare:
+        test_latency(net, "./test/latency-bare")
     test_bandwidth(net, "./test/bw-bare")
 
     if True:
@@ -131,8 +132,10 @@ def run():
     test_latency(net, "./test/latency-wg")
     test_bandwidth(net, "./test/bw-wg")
 
-
     CLI(net)
+
+    print(latency_bare.samples)
+
     net.stop()
 
 
