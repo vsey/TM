@@ -71,25 +71,27 @@ class NetworkTopo(Topo):
         s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
 
         # connections
+        latency = "10s"
+
         # S1
-        self.addLink(user, s1, delay="10ms")
-        self.addLink(isp_user, s1, intfName1="isp_user-s1", params1={"ip": "10.68.1.1/30"}, delay="10ms")
+        self.addLink(user, s1, delay=latency)
+        self.addLink(isp_user, s1, intfName1="isp_user-s1", params1={"ip": "10.68.1.1/30"}, delay=latency)
 
         # S2
-        self.addLink(internet_core, s2, intfName1="core-s2", params1={"ip": "10.68.2.1/30"}, delay="10ms")
-        self.addLink(isp_user, s2, intfName1="isp_user-s2", params1={"ip": "10.68.2.2/30"}, delay="10ms")
+        self.addLink(internet_core, s2, intfName1="core-s2", params1={"ip": "10.68.2.1/30"}, delay=latency)
+        self.addLink(isp_user, s2, intfName1="isp_user-s2", params1={"ip": "10.68.2.2/30"}, delay=latency)
 
         # S3
-        self.addLink(service, s3, delay="10ms")
-        self.addLink(internet_core, s3, intfName1="core-s3", params1={"ip": "10.68.3.1/30"}, delay="10ms")
+        self.addLink(service, s3, delay=latency)
+        self.addLink(internet_core, s3, intfName1="core-s3", params1={"ip": "10.68.3.1/30"}, delay=latency)
 
         # S4
-        self.addLink(isp_vpn, s4, intfName1="isp_vpn-s4", params1={"ip": "10.68.4.2/30"}, delay="10ms")
-        self.addLink(internet_core, s4, intfName1="core-s4", params1={"ip": "10.68.4.1/30"}, delay="10ms")
+        self.addLink(isp_vpn, s4, intfName1="isp_vpn-s4", params1={"ip": "10.68.4.2/30"}, delay=latency)
+        self.addLink(internet_core, s4, intfName1="core-s4", params1={"ip": "10.68.4.1/30"}, delay=latency)
 
         # S5
-        self.addLink(vpn, s5, delay="10ms")
-        self.addLink(isp_vpn, s5, intfName1="isp_vpn-s5", params1={"ip": "10.68.5.1/30"}, delay="10ms")
+        self.addLink(vpn, s5, delay=latency)
+        self.addLink(isp_vpn, s5, intfName1="isp_vpn-s5", params1={"ip": "10.68.5.1/30"}, delay=latency)
 
 
 def run():
