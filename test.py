@@ -3,6 +3,7 @@ from typing import Union
 import time
 import threading
 import psutil
+import os
 
 
 def ping(src, dst, count=5):
@@ -60,25 +61,25 @@ def test_bandwidth(net, file_name: str, result_dir: Union[Path, str] = Path(".")
 
 class CPUMonitor:
     def __init__(self) -> None:
+        self.proc = psutil.Process(os.getpid())
         self.results = None
 
     def __enter__(self):
-        self.before = psutil.cpu_times()
+        self.before = self.proc.cpu_times()
+        self.wall_start = time.time()
         return self
 
     def __exit__(self, type, value, traceback):
-        after = psutil.cpu_times()
+        after = self.proc.cpu_times()
+        wall = time.time() - self.wall_start
+
         user = after.user - self.before.user
         system = after.system - self.before.system
-        idle = after.idle - self.before.idle
-        steal = after.steal - self.before.steal
 
-        total = user + system + idle + steal
+        total = user + system
 
         self.results = {
             "user": user,
             "system": system,
-            "idle": idle,
-            "steal": steal,
-            "usage_pct": (user + system) / total * 100,
+            "usage_pct": (user + system) / wall * 100,
         }
