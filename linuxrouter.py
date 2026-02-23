@@ -72,7 +72,7 @@ class NetworkTopo(Topo):
         s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
 
         # connections
-        latency = "100ms"
+        latency = "10ms"
 
         # S1
         self.addLink(user, s1, delay=latency)
