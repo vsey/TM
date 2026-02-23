@@ -59,22 +59,26 @@ def test_bandwidth(net, file_name: str, result_dir: Union[Path, str] = Path(".")
 
 
 class CPUMonitor:
-    def __init__(self, interval=0.5):
-        self.interval = interval
-        self.samples = []
-        self._running = False
-        self._thread = None
-
-    def _record(self):
-        while self._running:
-            self.samples.append({"time": time.time(), "cpu_percent": psutil.cpu_percent(interval=self.interval)})
+    def __init__(self) -> None:
+        self.results = None
 
     def __enter__(self):
-        self._running = True
-        self._thread = threading.Thread(target=self._record, daemon=True)
-        self._thread.start()
+        self.before = psutil.cpu_times()
         return self
 
     def __exit__(self, type, value, traceback):
-        self._running = False
-        self._thread.join()
+        after = psutil.cpu_times()
+        user = after.user - self.before.user
+        system = after.system - self.before.system
+        idle = after.idle - self.before.idle
+        steal = after.steal - self.before.steal
+
+        total = user + system + idle + steal
+
+        self.results = {
+            "user": user,
+            "system": system,
+            "idle": idle,
+            "steal": steal,
+            "usage_pct": (user + system) / total * 100,
+        }

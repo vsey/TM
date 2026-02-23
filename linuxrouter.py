@@ -134,7 +134,7 @@ def run():
 
     CLI(net)
 
-    print(latency_bare.samples)
+    print(latency_bare.results)
 
     net.stop()
 
