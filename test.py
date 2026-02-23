@@ -76,8 +76,6 @@ class CPUMonitor:
         user = after.user - self.before.user
         system = after.system - self.before.system
 
-        total = user + system
-
         self.results = {
             "user": user,
             "system": system,
