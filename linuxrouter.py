@@ -32,6 +32,7 @@ from mininet.net import Mininet
 from mininet.node import Node, OVSSwitch
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
+from mininet.link import TCLink
 from functools import partial
 from test import test_latency, test_bandwidth, CPUMonitor
 
@@ -71,7 +72,7 @@ class NetworkTopo(Topo):
         s1, s2, s3, s4, s5 = [self.addSwitch(s) for s in ("s1", "s2", "s3", "s4", "s5")]
 
         # connections
-        latency = "10s"
+        latency = "100ms"
 
         # S1
         self.addLink(user, s1, delay=latency)
@@ -98,7 +99,10 @@ def run():
     "Test linux router"
     topo = NetworkTopo()
     net = Mininet(
-        topo=topo, waitConnected=True, switch=partial(OVSSwitch, failMode="standalone")
+        topo=topo,
+        waitConnected=True,
+        switch=partial(OVSSwitch, failMode="standalone"),
+        link=TCLink,
     )  # controller is used by s1-s3
     net.start()
 
