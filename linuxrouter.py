@@ -72,7 +72,7 @@ class NetworkTopo(Topo):
 
         # connections
         # S1
-        self.addLink(user, s1)
+        self.addLink(user, s1, delay="10ms")
         self.addLink(isp_user, s1, intfName1="isp_user-s1", params1={"ip": "10.68.1.1/30"})
 
         # S2
